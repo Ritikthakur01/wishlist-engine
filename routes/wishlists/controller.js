@@ -17,7 +17,7 @@ export const addMovie = async (req, res) => {
 
 export const getMovies = async (req, res) => {
   try {
-    const movies = await Movie.find({user:req.user._id});
+    const movies = await Movie.find({userId:req.user._id});
     return res.status(201).json({ flag:1,message:"All movies fetched successfully.",data : movies });
   } catch (error) {
     res.status(500).send(error);
@@ -38,7 +38,9 @@ export const getMovieById = async (req, res) => {
 
 export const updateMovie = async (req, res) => {
   try {
+    console.log("Ritikkkkkkkkkk", req.body)
     const movie = await Movie.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
+    console.log("movie", movie)
     if (!movie) {
       return res.status(404).json({
         flag: 0,
@@ -47,6 +49,7 @@ export const updateMovie = async (req, res) => {
     }
     return res.status(200).json({ flag:1,message: 'Moive updated successfully',data : movie });
   } catch (error) {
+     console.log("Error to update", error)
      return res.status(500).json({flag:0, error:error.message});
   }
 };
@@ -68,9 +71,12 @@ export const deleteMovie = async (req, res) => {
 export const toggleWatch = async (req, res) => {
     try {
       const { id } = req.params;
-      const userId = req.user;
 
-      const movie = await Movie.findOne({ _id: id, user: userId });
+      console.log("AuthorizationAuthorization",id)
+
+      const userId = req.user._id;
+
+      const movie = await Movie.findOne({ _id: id, userId: userId });
       if (!movie) {
         return res.status(404).json({ flag: 0, message: 'Movie not found' });
       }
