@@ -1,7 +1,8 @@
 import jwt from 'jsonwebtoken';
 import { generateDynamicSecretKey } from '../utils/constants/generateDynamicSecretKey';
+import { config } from '../utils/config';
 
-let currentSecretKey = generateDynamicSecretKey();
+let currentSecretKey = config.secret || generateDynamicSecretKey();
 
 export const generateToken = (user) => {
   const token = jwt.sign(
@@ -13,9 +14,10 @@ export const generateToken = (user) => {
 };
 
 export const authenticateUser = (req, res, next) => {
+
   const token = req.header("Authorization");
   if (!token) {
-    return res.status(201).json({   
+    return res.status(201).json({
       success: false,
       message: "Unauthorized: Missing token",
     });

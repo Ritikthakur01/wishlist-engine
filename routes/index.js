@@ -1,11 +1,12 @@
 import { Router } from "express";
-import userRouter from './users'
-import wishlistRoter from './wishlists'
+import authRouter from './auth';
+import paymentRouter from './payments';
+import { authenticateUser } from "../middelwares/jwt";
 
 const mainRouter = Router();
 
-mainRouter.use('/user',userRouter);
-mainRouter.use('/wishlist',wishlistRoter);
+mainRouter.use('/auth', authRouter);
+mainRouter.use('/payments',authenticateUser, paymentRouter);
 
 
 export default mainRouter

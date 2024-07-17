@@ -3,5 +3,6 @@ dotenv.config();
 
 export const config = {
   mongodburl: process.env.MONGO_URL,
-  port:process.env.PORT
+  port:process.env.PORT,
+  secret: process.env.SECRET,
 };

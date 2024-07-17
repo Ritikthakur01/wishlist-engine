@@ -2,6 +2,7 @@ import User from './model';
 import bcrypt from 'bcrypt';
 import { generateToken } from '../../middelwares/jwt';
 
+
 export const registerUser = async (req, res) => {
   try {
     const { name,email, password } = req.body;
@@ -16,6 +17,7 @@ export const registerUser = async (req, res) => {
 export const loginUser = async (req, res) => {
   try {
     const { email, pwd } = req.body;
+
     const user = await User.findOne({ email }).lean();
     if (!user) {
       return res.status(404).json({flag:0, message: 'User not found' });
@@ -30,7 +32,8 @@ export const loginUser = async (req, res) => {
 
     const token = generateToken(rest)
 
-    res.status(200).json({ flag: 1, token });
+    return res.status(200).json({ message: 'Login successful', token });
+
   } catch (error) {
     return res.status(500).json({flag:0, error:error.message});
   }
